@@ -29,6 +29,7 @@ const TodoListItem = ({ todo, onRemove, onToggle, style }) => {
 };
 
 export default React.memo(
+  // React.memo : shouldComponentUpdate
   TodoListItem,
   (prevProps, nextProps) => prevProps.todo === nextProps.todo,
 );
