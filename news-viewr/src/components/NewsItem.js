@@ -48,6 +48,7 @@ const NewsItem = ({ article }) => {
             {title}
           </a>
         </h2>
+        <p>{description}</p>
       </div>
     </NewsItemBlock>
   );

@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import NewsItem from './NewsItem';
 import usePromise from '../lib/usePromise';
+import useInfiniteScroll from '../lib/useInfiniteScroll';
 
 const NewsListBlock = styled.div`
   box-sizing: border-box;
@@ -27,7 +28,7 @@ const NewsList = ({ category }) => {
   }, [category]);
 
   if (loading) {
-    return <NewsList>대기 중...</NewsList>;
+    return <NewsListBlock>대기 중...</NewsListBlock>;
   }
   if (!response) {
     return null;
@@ -37,6 +38,7 @@ const NewsList = ({ category }) => {
     return <NewsListBlock>에러 발생!</NewsListBlock>;
   }
 
+  // response 값이 유효할 때
   const { articles } = response.data;
 
   return (
