@@ -35,23 +35,27 @@ const initialState = {
 
 const todos = handleActions(
   {
-    [CHANGE_INPUT]: (state, { payload: input }) => ({ ...state, input }),
-    [INSERT]: (state, { payload: todo }) => ({
-      ...state,
-      todos: state.todos.concat(todo),
-    }),
-    [TOGGLE]: (state, { payload: id }) => ({
-      ...state,
-      todos: state.todos.map((todo) =>
-        todo.id === id ? { ...todo, done: !todo.done } : todo,
-      ),
-    }),
-    [REMOVE]: (state, { payload: id }) => ({
-      ...state,
-      todos: state.todos.filter((todo) => todo.id !== id),
-    }),
+    [CHANGE_INPUT]: (state, { payload: input }) =>
+      produce(state, (draft) => {
+        draft.input = input;
+      }),
+    [INSERT]: (state, { payload: todo }) =>
+      produce(state, (draft) => draft.todos.push(todo)),
+    [TOGGLE]: (state, { payload: id }) =>
+      produce(state, (draft) => {
+        const todo = draft.todos.find((todo) => todo.id === id);
+        todo.done = !todo.done;
+      }),
+    [REMOVE]: (state, { payload: id }) =>
+      produce(state, (draft) => {
+        const index = draft.todos.findIndex((todo) => todo.id === id);
+        draft.todos.splice(index, 1);
+      }),
   },
   initialState,
 );
+// immer를 사용한다고 해서 모든 업데이트 함수에 immer를 적용할 필요는 없다.
+// 일반 자바스크립트로 처리하는 것이 더 편할 때에는 immer 함수를 적용하지 않아도 된다.
+// 예를 들어 위 코드에서 TOGGLE을 제외한 업데이트 함수들은 immer를 쓰지 않는 코드가 더 짧기때문에 이전 형태를 유지하는 것도 무방하다.
 
 export default todos;
