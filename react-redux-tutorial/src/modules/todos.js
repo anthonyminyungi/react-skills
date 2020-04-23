@@ -1,4 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
+import produce from 'immer';
 
 const CHANGE_INPUT = 'todos/CHANGE_INPUT';
 const INSERT = 'todos/INSERT';
@@ -40,7 +41,9 @@ const todos = handleActions(
         draft.input = input;
       }),
     [INSERT]: (state, { payload: todo }) =>
-      produce(state, (draft) => draft.todos.push(todo)),
+      produce(state, (draft) => {
+        draft.todos.push(todo);
+      }),
     [TOGGLE]: (state, { payload: id }) =>
       produce(state, (draft) => {
         const todo = draft.todos.find((todo) => todo.id === id);
